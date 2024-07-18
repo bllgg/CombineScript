@@ -1,16 +1,28 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pandas as pd
+import glob
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Function to read all Excel files and combine them based on topics
+def combine_excel_files(directory_path, output_file):
+    # List to hold dataframes
+    dataframes = []
+
+    # Read all xlsx files in the directory
+    for file in glob.glob(f"{directory_path}/*.xlsx"):
+        df = pd.read_excel(file)
+        dataframes.append(df)
+
+    # Concatenate all dataframes
+    combined_df = pd.concat(dataframes, ignore_index=True)
+
+    # Assuming the topic column is named 'Topic'
+    # Adjust as necessary if your column name is different
+    combined_df.sort_values(by=['Topic'], inplace=True)
+
+    # Write the combined dataframe to a new Excel file
+    combined_df.to_excel(output_file, index=False)
 
 
-# Press the green button in the gutter to run the script.
+# Example usage
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    combine_excel_files('path_to_your_directory', 'combined_output.xlsx')
