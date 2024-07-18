@@ -2,7 +2,6 @@ import pandas as pd
 import glob
 
 
-# Function to read all Excel files and combine them based on topics
 def combine_excel_files(directory_path, output_file):
     # List to hold dataframes
     dataframes = []
@@ -12,12 +11,12 @@ def combine_excel_files(directory_path, output_file):
         df = pd.read_excel(file)
         dataframes.append(df)
 
-    # Concatenate all dataframes
-    combined_df = pd.concat(dataframes, ignore_index=True)
+    # Concatenate all dataframes, using outer join to ensure all topics are included
+    combined_df = pd.concat(dataframes, ignore_index=True, sort=False)
 
     # Assuming the topic column is named 'Topic'
-    # Adjust as necessary if your column name is different
-    combined_df.sort_values(by=['Topic'], inplace=True)
+    # Fill NaN values with an appropriate placeholder if needed
+    combined_df.fillna('', inplace=True)
 
     # Write the combined dataframe to a new Excel file
     combined_df.to_excel(output_file, index=False)
